@@ -8,4 +8,13 @@ app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.listen(process.env.PORT || 8081)
+app.get('/posts', (req, res) => {
+  res.send(
+    [{
+      title: "Hello World!",
+      description: "Hi there! How are you? IM Good"
+    }]
+  )
+})
+
+app.listen(process.env.PORT || 8083)
