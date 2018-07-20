@@ -19,6 +19,6 @@ So im using mongoDB atlas and moongoose to do the database stuff.
 simple create read edit shiz. 
 
 # RUNNING
-go into client and type npm run dev
+go into client and type npm run dev \n
 go into server and type npm start
 
