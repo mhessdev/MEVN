@@ -15,10 +15,10 @@ The goal is to have an easy to install Js Framweork for building out application
 # MongoDB
 So im using mongoDB atlas and moongoose to do the database stuff. 
 
-#CRUD
+# CRUD
 simple create read edit shiz. 
 
-#RUNNING
+# RUNNING
 go into client and type npm run dev
 go into server and type npm start
 
