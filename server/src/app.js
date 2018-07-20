@@ -1,3 +1,5 @@
+require('dotenv').load();
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -22,7 +24,7 @@ app.listen(process.env.PORT || 8083)
 
 // THIS HAS TO DO WITH CONNECTING TO MongoDB -- No fucking clue what it means/does tbh
 var mongoose = require('mongoose');
-mongoose.connect("mongodb+srv://dev:rebel5534@cluster0-46ksk.mongodb.net/posts?retryWrites=true");
+mongoose.connect(process.env.db);
 var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback){
