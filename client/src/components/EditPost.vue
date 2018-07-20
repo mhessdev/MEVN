@@ -9,6 +9,9 @@
           <textarea rows="15" cols="15" placeholder="DESCRIPTION" v-model="description"></textarea>
         </div>
         <div>
+          <input type="text" name="link" placeholder="LINK" v-model="link">
+        </div>
+        <div>
           <button class="app_post_btn" @click="updatePost">Update</button>
         </div>
       </div>
@@ -22,7 +25,8 @@ export default {
   data () {
     return {
       title: '',
-      description: ''
+      description: '',
+      link: ''
     }
   },
   mounted () {
@@ -35,12 +39,14 @@ export default {
       })
       this.title = response.data.title
       this.description = response.data.description
+      this.link = response.data.link
     },
     async updatePost () {
       await PostsService.updatePost({
         id: this.$route.params.id,
         title: this.title,
-        description: this.description
+        description: this.description,
+        link: this.link
       })
       this.$router.push({ name: 'Posts' })
     }

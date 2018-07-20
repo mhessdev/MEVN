@@ -9,11 +9,13 @@
         <tr>
           <td>Title</td>
           <td width="550">Description</td>
+          <td width="550">Link</td>
           <td width="100" align="center">Action</td>
         </tr>
         <tr v-for="post in posts" :key="post.id">
           <td>{{ post.title }}</td>
           <td>{{ post.description }}</td>
+          <td>{{ post.link }}</td>
           <td align="center">
             <router-link v-bind:to="{ name: 'EditPost', params: { id: post._id } }">Edit</router-link> |
             <a href="/posts" @click="deletePost(post._id)">Delete</a>

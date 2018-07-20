@@ -9,6 +9,9 @@
           <textarea rows="15" cols="15" placeholder="DESCRIPTION" v-model="description"></textarea>
         </div>
         <div>
+          <input type="text" name="link" placeholder="LINK" v-model="link">
+        </div>
+        <div>
           <button class="app_post_btn" @click="addPost">Add</button>
         </div>
       </div>
@@ -23,14 +26,16 @@ export default {
   data () {
     return {
       title: '',
-      description: ''
+      description: '',
+      link: ''
     }
   },
   methods: {
     async addPost () {
       await PostsService.addPost({
         title: this.title,
-        description: this.description
+        description: this.description,
+        link: this.link
       })
       this.$router.push({ name: 'Posts' })
     }
