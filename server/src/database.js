@@ -41,6 +41,20 @@ class DB extends Pludo {
 			database: this.database
 		});
 
+		// *******************************************
+		// MH - 31 July 2018 (Tuesday)
+		// This is a pool connection it allows for 10 connections to always be up
+		// This is better for production environments 
+		// I will be adding functions to work with this in the future
+		// *******************************************
+		// this.conn = this.mysql.creatPool({
+		// 	connectionLimit: 10,
+		// 	host: this.host,
+		// 	user: this.user,
+		// 	password: this.pass,
+		// 	database: this.database
+		// });
+
 	}
 
 	// *******************************************
@@ -158,40 +172,19 @@ class DB extends Pludo {
 	}
 
 	// *******************************************
-	// MH - 31 July 2018 (Tuesday)
-	// Method: runQueryGetId
-	// Usage: This function is asynch whihc means it will run and wait for completion before sending back
-	// *******************************************
-	runQueryGetId(sql){
-		// Because JS is asynchronous. 
-		// things will still be running while tyring to procces the data
-		// For instance you would lose some id's because the array.push would run before the query finished
-		// I dont really like this about JS php handels this kind of thing a lot better
-		// gotta use await or the code below will run without updating the id array
-		// example of await: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
-		// example https://codeburst.io/node-js-mysql-and-promises-4c3be599909b
-		await this.query(sql)
-			.then(row => {
-				console.log("*** Data Has Been Inserted!");
-				console.log(row);
-				return row.insertId;
-			});
-	}
-
-	// *******************************************
 	// MH - 30 July 2018 (Monday)
 	// Method: insert
 	// Usage: insert data into table
 	// This is one way ill be doing it
 	// Going to make another insert function that is array of fields and array of arrays of data
 	// For now this will do
-	// the asymc is there because i need to have an await to be able to retun the ids
+	// the asymc is there because i need to have an await to be able to return the ids
 	// *******************************************
-	insert(table, data){
+	async insert(table, data){
 		this.checkTable(table);
 
 		// Empty array to get the inserted ids. 
-		var insertedIds = [];
+		let insertedIds = [];
 
 		// Loops through each row of the data being inserted
 		// gets the keys for that row
@@ -217,14 +210,17 @@ class DB extends Pludo {
 
 			console.log("*** Query Running: "+sql);
 
-			insertedIds.push(this.runQueryGetId(sql));
+			let insert = await this.query(sql);
+
+			insertedIds.push(insert.insertId);
 			
 			// Checking for last thing in loop to execute this code
 			if(i == data.length - 1)
 			{	
-				this.close()
+				this.close();
 				// It will always return the ids. Idk why it wouldnt. Dont set it to a varaible if you dont wanna use it.
 				console.log("*** Inserted IDs: "+ insertedIds);
+				// Need this return or the .then in the call wont work. 
 				return insertedIds;
 			}
 		}

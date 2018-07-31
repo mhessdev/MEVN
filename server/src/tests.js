@@ -43,12 +43,21 @@ var pludo = new Pludo; // Pludo is only nessasary if you need those functions bu
 // 	{name: 'newCol2'}
 // ]);
 
-var insert = db.insert('test2', [
+
+// WORKS  
+// Do this if you want the ids back 
+// remove the .thn if not!!!!
+//https://davidwalsh.name/async-await
+db.insert('test2', [
 	{test: 'New Val', testLong: 'new LONG', testInt: 1},
 	{test: 'New Val2', testLong: 'new LONG2', testInt: 2}
-]);
+]).then(insertedIds => {
+	var ids = insertedIds;
+	Pludo.dump(ids);
+});
 
-//Pludo.dump(insert);
+
+
 
 
 
