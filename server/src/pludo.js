@@ -42,6 +42,7 @@ class Pludo {
 	static printArray(arr, dump = false){
 		if(! Array.isArray(arr) ){console.log("*** Value passed not an array!"); return;}
 
+		console.log("\n*** Pludo.printArray");
 		if(dump == false)
 		{
 			for (var i = arr.length - 1; i >= 0; i--) {

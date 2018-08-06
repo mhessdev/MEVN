@@ -189,19 +189,19 @@ class DB extends Pludo {
 		// Loops through each row of the data being inserted
 		// gets the keys for that row
 		// inserts row by row. Rather than all at once
-		for (var i = 0; i < data.length; i++) {
-			var sql = 'insert into '+table+' (';
+		for (let i = 0; i < data.length; i++) {
+			let sql = 'insert into '+table+' (';
 
-			var cols = Object.keys(data[i]);
-			for (var x = 0; x < cols.length; x++) {
+			let cols = Object.keys(data[i]);
+			for (let x = 0; x < cols.length; x++) {
 				sql += cols[x];
 				if(x != cols.length - 1){ sql+= ", "; }
 			}
 
 			sql += ') VALUES (';
 
-			var vals = Object.values(data[i]);
-			for (var z = 0; z < vals.length; z++) {
+			let vals = Object.values(data[i]);
+			for (let z = 0; z < vals.length; z++) {
 				sql += "'"+vals[z]+"'";
 				if(z != vals.length - 1){ sql+= ", "; }
 			}
@@ -225,6 +225,148 @@ class DB extends Pludo {
 			}
 		}
 	}	
+
+	// *******************************************
+	// MH - 06 August 2018 (Monday)
+	// Method: selectErrCheck
+	// Usage: runs before the select statement is made
+	// checks for any erros in the provided params/syntax and returns
+	// *******************************************
+	selectErrCheck(params){
+
+		// Making sure params is an object
+		if(typeof params !== 'object'){
+			console.log('Err. Typeof params is not object!');
+			this.disconnect();
+			return false;
+		}
+
+		// makeing sure from is set - how are us supposed to run a select without a from? 
+		if(!('from' in params) || params.from.length == 0){
+			console.log("Err. You must specifie the table(s) to select from useing the from: key in your object!");
+			this.disconnect();
+			return false;
+		}
+		else{
+			for(let table of params.from){
+				this.checkTable(table);
+			}
+		}
+
+		// Checking for correct paramaters use cant pass in antyhing other than whats in acceptedkeys
+		// also checks that the data passed for each param is the proper typeof
+		// arr == array
+		let acceptedKeys = {select: "object", where: "object", from: "object", limit: "number", orderby: "object", groupby: "object"};
+		for (let key in params){
+			//checking for key
+			if(!(key in acceptedKeys)){
+				console.log('Err. The Objkey "' + key + '" is not valid');
+				console.log("Object of valid keys", acceptedKeys);
+				this.disconnect();
+				return false;
+			}
+			//Checking for proper data type
+			if(typeof params[key] !== acceptedKeys[key]){
+				console.log("Err. The param '"+key+ "' cannot be "+ typeof params[key] + '. Must be '+ acceptedKeys[key]);
+				this.disconnect();
+				return false;
+			}
+		}
+
+	}
+
+	// *******************************************
+	// MH - 01 August 2018 (Wednesday)
+	// Method: select
+	// Usage: select things from the database
+	// table: the table to select from
+	// params: params can be anthing, from the where clause
+	// to select, to limit, its an empty object you can fill. 
+	// the function will build the query based on the params you set. 
+	// The first thing the fucntion does is check this array for params that arnt known
+	// So you cant do like applesauce: 'dad' - cause applesauce isnt a sql parameter dummy
+	// *******************************************
+	async select(params = {}){
+
+		// Check for pramater and syntax errs
+		if(this.selectErrCheck(params) == false){return;};
+
+		// Build select
+		let sql = 'SELECT ';
+
+		if('select' in params  && params.select.length > 0){
+			for (let i = 0; i < params.select.length; i++) {
+				if(i != params.select.length - 1){
+					sql += params.select[i] + ', ';
+					continue;
+				}
+				sql += params.select[i] + ' ';
+			}
+		}
+		else{
+			// Defaults to *
+			sql += '* ';
+		}
+
+		// Build from
+		sql += 'FROM ';
+
+		for (let i = 0; i < params.from.length; i++) {
+			if(i != params.from.length - 1){
+				sql += params.from[i] + ', ';
+				continue;
+			}
+			sql += params.from[i] + ' ';
+		}
+
+		// Build Where
+		if('where' in params && params.where.length > 0){
+			sql += 'WHERE ';
+			for (let x = 0; x < params.where.length; x++) {
+				if(x != params.where.length - 1){
+					sql += params.where[x] + ' AND ';
+					continue;
+				}
+				sql += params.where[x] + ' ';
+			}
+		}
+
+		// Build Limit
+		if('limit' in params){
+			sql += 'LIMIT ' + params.limit + ' ';
+		}
+
+		// Build Orderby
+		if('orderby' in params){
+			sql += 'ORDER BY ';
+			for (let x = 0; x < params.orderby.length; x++) {
+				if(x != params.orderby.length - 1){
+					sql += params.orderby[x] + ', ';
+					continue;
+				}
+				sql += params.orderby[x] + ' ';
+			}
+		}
+
+		// Build Groupby
+		if('groupby' in params){
+			sql += 'GROUP BY ';
+			for (let x = 0; x < params.groupby.length; x++) {
+				if(x != params.groupby.length - 1){
+					sql += params.groupby[x] + ', ';
+					continue;
+				}
+				sql += params.groupby[x] + ' ';
+			}
+		}
+
+		console.log(sql);
+
+		let response = await this.query(sql);
+
+		console.log(response);
+		this.disconnect();
+	}
 	
 }
 

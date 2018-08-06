@@ -8,9 +8,10 @@ var Pludo = require('./pludo.js');
 var DB = require('./database.js');
 var Schema = require('./schema.js');
 
+
 // Then we need to extanciate the class
 var db = new DB;
-var pludo = new Pludo; // Pludo is only nessasary if you need those functions but because we are calling db wich extends all of pludo we dont need it. 
+//var pludo = new Pludo; // Pludo is only nessasary if you need those functions but because we are calling db wich extends all of pludo we dont need it. 
 //var schema  = new Schema;
 
 /// DOING TESTs
@@ -48,18 +49,30 @@ var pludo = new Pludo; // Pludo is only nessasary if you need those functions bu
 // Do this if you want the ids back 
 // remove the .thn if not!!!!
 //https://davidwalsh.name/async-await
-db.insert('test2', [
-	{test: 'New Val', testLong: 'new LONG', testInt: 1},
-	{test: 'New Val2', testLong: 'new LONG2', testInt: 2}
-]).then(insertedIds => {
-	var ids = insertedIds;
-	Pludo.dump(ids);
+// db.insert('test2', [
+// 	{test: 'New Val', testLong: 'new LONG', testInt: 1},
+// 	{test: 'New Val2', testLong: 'new LONG2', testInt: 2}
+// ]).then(insertedIds => {
+// 	var ids = insertedIds;
+// 	Pludo.printArray(ids);
+// });
+
+// Works but im moving this into its own class
+// db.select('test2', [], [], 10).then(result => {
+// 	Pludo.printArray(result);
+// });
+
+// var select = new Select();
+
+// select.from('test').check();
+
+db.select({
+	select: ['id', 'test as firstCol', 'testInt'],
+	from:   ['test2'],
+	where:  ['testInt > 1'],
+	limit:  10
 });
-
-
-
-
-
-
+//orderby: ['test2 ASC', 'tes1'],
+//groupby: ['test2']
 
 
