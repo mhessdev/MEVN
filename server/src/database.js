@@ -243,7 +243,7 @@ class DB extends Pludo {
 
 		// makeing sure from is set - how are us supposed to run a select without a from? 
 		if(!('from' in params) || params.from.length == 0){
-			console.log("Err. You must specifie the table(s) to select from useing the from: key in your object!");
+			console.log("Err. You must specifie the table(s) to select from using the from: key in your object!");
 			this.disconnect();
 			return false;
 		}
@@ -324,10 +324,10 @@ class DB extends Pludo {
 			sql += 'WHERE ';
 			for (let x = 0; x < params.where.length; x++) {
 				if(x != params.where.length - 1){
-					sql += params.where[x] + ' AND ';
+					sql += this.conn.escape(params.where[x]) + ' AND ';
 					continue;
 				}
-				sql += params.where[x] + ' ';
+				sql += this.conn.escape(params.where[x]) + ' ';
 			}
 		}
 
@@ -341,10 +341,10 @@ class DB extends Pludo {
 			sql += 'ORDER BY ';
 			for (let x = 0; x < params.orderby.length; x++) {
 				if(x != params.orderby.length - 1){
-					sql += params.orderby[x] + ', ';
+					sql += this.conn.escape(params.orderby[x]) + ', ';
 					continue;
 				}
-				sql += params.orderby[x] + ' ';
+				sql += this.conn.escape(params.orderby[x]) + ' ';
 			}
 		}
 
@@ -353,10 +353,10 @@ class DB extends Pludo {
 			sql += 'GROUP BY ';
 			for (let x = 0; x < params.groupby.length; x++) {
 				if(x != params.groupby.length - 1){
-					sql += params.groupby[x] + ', ';
+					sql += this.conn.escape(params.groupby[x]) + ', ';
 					continue;
 				}
-				sql += params.groupby[x] + ' ';
+				sql += this.conn.escape(params.groupby[x]) + ' ';
 			}
 		}
 
@@ -367,7 +367,111 @@ class DB extends Pludo {
 
 		this.disconnect();
 	}
-	
+
+
+	// *******************************************
+	// MH - 06 August 2018 (Monday)
+	// Method: raw
+	// Usage: Runs a raw query passed in as a string
+	// do not use this with any user submited data as it is insecure
+	// this is vunerable to MYSQL injections
+	// *******************************************
+	async raw(sql){
+		let result = await this.query(sql);
+		this.disconnect();
+		return result;
+	}
+
+	// *******************************************
+	// MH - 06 August 2018 (Monday)
+	// Method: delete
+	// Usage: to delete rows from a table
+	// *******************************************
+	async delete(table, where = []){
+
+		this.checkTable(table);
+
+		if(typeof where !== 'object'){
+			console.log("Err. where must be array/object");
+			this.disconnect();
+			return;
+		}
+
+		if(where.length == 0){
+			console.log("Err. Please set somthign to delete in where clause!");
+			this.disconnect();
+			return;
+		}
+
+		let sql = "DELETE FROM "+table + " WHERE ";
+
+		for (let x = 0; x < where.length; x++) {
+			if(x != where.length - 1){
+				sql += where[x] + ' AND ';
+				continue;
+			}
+			sql += where[x] + ' ';
+		}
+
+		let result = await this.query(sql);
+
+		console.log(result);
+
+		this.disconnect();
+	}
+
+	// *******************************************
+	// MH - 06 August 2018 (Monday)
+	// Method: udpate
+	// Usage: used to update rows in a table
+	// *******************************************
+	async update(table, set = [], vals = [], where = []){
+		
+		//Catch Errors
+		this.checkTable(table);
+
+		if(typeof set != 'object' || typeof vals != 'object' || typeof where != 'object'){
+			console.log("set, vals, and where should all be type ojects/array");
+			this.disconnect();
+			return;
+		}
+
+		if((set.length == 0 || vals.length == 0) || (set.length != vals.length)){
+			console.log("Set and Vals both need to have data AND have the same amount!");
+			this.disconnect();
+			return;
+		}
+
+		//Build statment
+		let sql = "UPDATE "+table+ " SET ";
+		for (let i = 0; i < set.length; i++) {
+			if(i != set.length - 1){
+				sql += set[i] + " = '" + this.conn.escape(vals[i]) + "', ";
+				continue;	
+			}
+			sql += set[i] + " = '" + this.conn.escape(vals[i]) +"'";
+		}
+
+		if(where.length > 0){
+			sql += ' WHERE ';
+			for (let x = 0; x < where.length; x++) {
+				if(x != where.length - 1){
+					sql += where[x] + ' AND ';
+					continue;
+				}
+				sql += where[x] + ' ';
+			}
+		}
+
+		console.log(sql);
+
+		let result = await this.query(sql);
+
+		console.log(result);
+
+		this.disconnect();
+
+	}
 }
 
 // This is how you can use it in other files. 

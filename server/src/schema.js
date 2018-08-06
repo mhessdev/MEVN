@@ -102,6 +102,25 @@ class Schema extends DB{
 			if (err) throw err;
 			console.log(result);
 		});
+
+		this.disconnect();
+	}
+
+	// *******************************************
+	// MH - 06 August 2018 (Monday)
+	// Mathod: dropTable
+	// Usage: to drop a table from the database
+	// *******************************************
+	dropTable(table){
+		this.checkTable(table);	
+
+		let sql = 'DROP TABLE '+table;
+		this.conn.query(sql, function (err, result) {
+	    	if (err) throw err;
+	    	console.log("Table "+ table +" deleted");
+	  	});
+
+	  	this.disconnect();
 	}
 
 	// *******************************************
@@ -157,6 +176,7 @@ class Schema extends DB{
 			if (err) throw err;
 			console.log(result);
 		});
+		this.disconnect();
 	}
 
 }

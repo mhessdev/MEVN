@@ -49,13 +49,13 @@ var db = new DB;
 // Do this if you want the ids back 
 // remove the .thn if not!!!!
 //https://davidwalsh.name/async-await
-// db.insert('test2', [
-// 	{test: 'New Val', testLong: 'new LONG', testInt: 1},
-// 	{test: 'New Val2', testLong: 'new LONG2', testInt: 2}
-// ]).then(insertedIds => {
-// 	var ids = insertedIds;
-// 	Pludo.printArray(ids);
-// });
+db.insert('test2', [
+	{test: 'New Val', testLong: 'new LONG', testInt: 1},
+	{test: 'New Val2', testLong: 'new LONG2', testInt: 2}
+]).then(insertedIds => {
+	var ids = insertedIds;
+	Pludo.printArray(ids);
+});
 
 // Works but im moving this into its own class
 // db.select('test2', [], [], 10).then(result => {
@@ -66,16 +66,22 @@ var db = new DB;
 
 // select.from('test').check();
 
+//orderby: ['test2 ASC', 'tes1'],
+//groupby: ['test2']
 db.select({
 	select: ['id', 'test as firstCol', 'testInt'],
 	from:   ['test2'],
 	where:  ['testInt > 1'],
-	limit:  10,
-	orderby: ['test2 ASC', 'tes1'],
-	groupby: ['test2']
+	limit:  10	
 }).then(result => {
 	Pludo.printArray(result);
 });
 
+db.raw('select * from test2').then(result => {
+	console.log(result);
+})
 
+// db.delete('test2', ['id > 10']);
+
+//db.update('test2', ["testLong", "testInt"], ["disLongBoi", 3], ["id > 5", "testInt = 2"]);
 
