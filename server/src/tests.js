@@ -70,9 +70,12 @@ db.select({
 	select: ['id', 'test as firstCol', 'testInt'],
 	from:   ['test2'],
 	where:  ['testInt > 1'],
-	limit:  10
+	limit:  10,
+	orderby: ['test2 ASC', 'tes1'],
+	groupby: ['test2']
+}).then(result => {
+	Pludo.printArray(result);
 });
-//orderby: ['test2 ASC', 'tes1'],
-//groupby: ['test2']
+
 
 

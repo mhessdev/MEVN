@@ -362,9 +362,9 @@ class DB extends Pludo {
 
 		console.log(sql);
 
-		let response = await this.query(sql);
+		let result = await this.query(sql);
+		return result;
 
-		console.log(response);
 		this.disconnect();
 	}
 	
