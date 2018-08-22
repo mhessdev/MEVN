@@ -75,5 +75,6 @@ There are few files that are examples of how mongoDb can work. server/models/pos
 Go to mailgun.com and set up an account put the appropriet values for these varaibles in your .env
 
 mailgunActiveKey=
+
 mailgunDomain=
 
