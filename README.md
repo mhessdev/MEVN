@@ -1,4 +1,5 @@
 #Pludo
+
 Thank you for useing Pludo! Pludo is a framework/cms built for developers to easily through together sites. 
 
 Pludo utilizes an array of different things to allow for complete customozation of how you want to use it. 
@@ -20,7 +21,6 @@ User Systems
 
 mySQL Table Migrations
 
-
 # RUNNING
 go into client and type npm install npm run dev
 
@@ -31,6 +31,7 @@ copy .env_example into a file called .env inside of your server folder
 fill in the appropriate variables with values unique to your application
 
 #File Structure
+
 The main files for pludo are inside of server/pludo. This is where all the underlying classes exist. You can work directly in this folder or do your main application structure in src (this is what I suggest)
 
 The models folder is used with MongoDB - There is an example file called posts. This should be simpel enough to set up.
@@ -57,6 +58,7 @@ sqlDB=
 Fill in the above varaibles and start setting up your migrations. Example migration can be found in /server/migrations/firsMigration.js
 
 #Using MongoDB
+
 If you are using MongoDB you will also need to set up the MongoDB database and put in the path to your database. 
 
 I used https://www.mongodb.com/cloud/atlas
