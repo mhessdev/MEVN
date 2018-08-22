@@ -1,10 +1,10 @@
 # Pludo
 
-Thank you for useing Pludo! Pludo is a framework/cms built for developers to easily through together sites. 
+Thank you for useing Pludo! Pludo is a framework/cms built for developers to easily create simple (hopefully complex in the future) sites. 
 
 Pludo utilizes an array of different things to allow for complete customozation of how you want to use it. 
 
-Node Js is the back end language and VueJs is the front end framework being used. 
+Node Js is the back end and VueJs is the front end being used. 
 
 Intergrations with mySQL and MongoDB have been created, The intention is add Firebase support at somepoint as well.
 
