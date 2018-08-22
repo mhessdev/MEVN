@@ -1,4 +1,4 @@
-#Pludo
+# Pludo
 
 Thank you for useing Pludo! Pludo is a framework/cms built for developers to easily through together sites. 
 
@@ -30,7 +30,7 @@ copy .env_example into a file called .env inside of your server folder
 
 fill in the appropriate variables with values unique to your application
 
-#File Structure
+# File Structure
 
 The main files for pludo are inside of server/pludo. This is where all the underlying classes exist. You can work directly in this folder or do your main application structure in src (this is what I suggest)
 
@@ -43,7 +43,7 @@ There is a tests folder inside of pludo - this will hold multple examples of how
 The client folder is the front end for your app. All the main pludo vue js components will be in here. 
 
 
-#Using MYSQL
+# Using MYSQL
 
 You will need proper knowlege of setting up a mysql server. The environment varibales associated with the MYSQL portion of pludo are.
 
@@ -70,7 +70,7 @@ Or put it in an .env on the /server level file like this db="THE PATH TO YOUR DB
 There are few files that are examples of how mongoDb can work. server/models/posts and pludo/tests/mongoExamples
 
 
-#Using MailGun
+# Using MailGun
 
 Go to mailgun.com and set up an account put the appropriet values for these varaibles in your .env
 
