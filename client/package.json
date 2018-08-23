@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "1.0.0",
-  "description": "I think its just the front end of the MEVN",
+  "description": "Pludo",
   "author": "Marc Hess marc@mhessdev.com",
   "private": true,
   "scripts": {
